@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <!--이미지 나타내기-->
+  <strong>Image:</strong>
+  <img src="<%= @post.image.url %>" >
+  <%#= img_tag @post.image.url, width: '200px' %>
+  
+</p>
+<p>
+  <!--작성한 유저 정보 나타내기-->
+  <strong>User :</strong>
+  <%= @post.user.name %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @post.content %>
+</p>
+
+<!--post 방식 : create, update 등의 내부 동작을 하는 액션일 때 사용-->
+<p>
+  <% if @post.like_users.include?(current_user) %>
+    <%= link_to 'Unlike', like_post_path, method: :post %>
+  <% else %>
+    <%= link_to 'like', like_post_path, method: :post %>
+  <% end %>
+</p>
+
+<p>
+  <strong>Likes:</strong>
+  <%= @post.like_users.count %>
+  <!--좋아요 누른 사람들 리스트의 항목 수를 나타냄-->
+</p>
+  
+  <!-- 좋아요를 눌렀는지 확인(가시화). 본인 아이디값을 보여줌.-->
+  
+<% if @post.user == current_user %>
+<!--<#% if can? :manage, @post %>-->
+  <%= link_to 'Edit', edit_post_path(@post) %>
+<% end %>
+<%= link_to 'Back', posts_path %>

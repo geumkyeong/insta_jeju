@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= user.name %> Posts</h1>
+<!--현재 유저가 어떤 유저를 팔로우 할 것 인지-->
+<!--@user 팔로우 할 사람의 정보-->
+<% if can? :follow, @user %>
+    <%= link_to 'Follow', follow_user_path(@user), method: :past %> 
+<% end %>
+
+Followees : <%= @user.followees.count %>
+Followers : <%= @user.followers.count %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Content</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= image_tag post.image.url(:thumb) %></td>
+        <td><%= link_to post.user.name, post.user %></td>
+        <td><%= link_to 'Show', post %></td>
+        <% if can? :manage, post %>
+        <!-- = <#% if post.user == current_user %>-->
+        <!--post 앞에 @가 안 붙은이유는 여러 포스트를 받아오기 때문-->
+        <!-- 또는 -> if user_signed_in? && post.user.id == current_user.id-->
+        <td><%= link_to 'Edit', edit_post_path(post) %></td>
+        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+
+<!--이 포스트를 update를 할 수있는 유저라면-->
+<!--그러면 update의 cancancan 권한 설정-->
+<% if can? :update, @user %> 
+<!--자기 페이지일 때만 편집 표시-->
+<%= link_to 'Edit User', edit_user_registration_path %>
+<% end %>
